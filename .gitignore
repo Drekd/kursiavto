@@ -1,0 +1,15 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+db.sqlite3
+
+# React / Node
+node_modules/
+dist/
+.env
+
+# Системные файлы
+.DS_Store
+Thumbs.db
+.vscode/
