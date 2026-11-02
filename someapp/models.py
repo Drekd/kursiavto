@@ -10,7 +10,7 @@ class Car(models.Model):
     transmission = models.CharField('КПП', max_length=50, default='Автомат')
     body = models.CharField('Кузов', max_length=50, default='Седан')
     color = models.CharField('Цвет', max_length=50, default='Черный')
-    image = models.URLField('URL изображения', blank=True)
+    image = models.CharField('URL изображения', max_length=500, blank=True)
     description = models.TextField('Описание', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
