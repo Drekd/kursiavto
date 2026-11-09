@@ -7,13 +7,18 @@ export default function Admin({ token }) {
   const [tab, setTab] = useState('cars');
   const [cars, setCars] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [testDrives, setTestDrives] = useState([]);
   const [form, setForm] = useState(emptyCar);
   const [editing, setEditing] = useState(null);
 
   const load = () => {
     api.getCars().then(setCars);
-    if (token) api.getOrders(token).then(setOrders);
+    if (token) {
+      api.getOrders(token).then(setOrders);
+      api.getTestDrives(token).then(setTestDrives); 
+    }
   };
+
   useEffect(() => { load(); }, [token]);
 
   if (!token) return <p>Требуется <a href="/login">вход</a>.</p>;
@@ -31,10 +36,13 @@ export default function Admin({ token }) {
   return (
     <>
       <h1 style={{ marginBottom: 20 }}>Админ-панель</h1>
+      
       <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
         <button className={`btn ${tab === 'cars' ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setTab('cars')}>Автомобили</button>
         <button className={`btn ${tab === 'orders' ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setTab('orders')}>Заявки ({orders.length})</button>
+        <button className={`btn ${tab === 'testdrives' ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setTab('testdrives')}>Тест-драйвы ({testDrives.length})</button>
       </div>
+
       {tab === 'cars' && (
         <>
           <form onSubmit={submit} style={{ background: '#fff', padding: 20, borderRadius: 12, marginBottom: 24 }}>
@@ -72,6 +80,7 @@ export default function Admin({ token }) {
           </table>
         </>
       )}
+
       {tab === 'orders' && (
         <table className="table">
           <thead><tr><th>ID</th><th>Авто</th><th>Клиент</th><th>Телефон</th><th>Статус</th></tr></thead>
@@ -86,6 +95,26 @@ export default function Admin({ token }) {
                 </td>
               </tr>
             ))}
+          </tbody>
+        </table>
+      )}
+
+      {tab === 'testdrives' && (
+        <table className="table">
+          <thead><tr><th>ID</th><th>Авто (ID)</th><th>Клиент</th><th>Телефон</th><th>Дата</th></tr></thead>
+          <tbody>
+            {testDrives.map(td => (
+              <tr key={td.id}>
+                <td>{td.id}</td>
+                <td>Машина ID: {td.car}</td> 
+                <td>{td.name}</td>
+                <td>{td.phone}</td>
+                <td>{td.date}</td>
+              </tr>
+            ))}
+            {testDrives.length === 0 && (
+              <tr><td colSpan="5" style={{ textAlign: 'center', color: '#6b7280' }}>Записей нет</td></tr>
+            )}
           </tbody>
         </table>
       )}

@@ -7,7 +7,7 @@ import Login from './pages/Login.jsx';
 import About from './pages/About.jsx';
 import Contacts from './pages/Contacts.jsx';
 import Sellers from './pages/Sellers.jsx';
-import MapPage from './pages/Map.jsx'; // Импортируем карту
+import MapPage from './pages/Map.jsx'; 
 
 export default function App() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
@@ -23,7 +23,7 @@ export default function App() {
     <>
       <nav className="navbar">
         <div className="container">
-          <Link to="/" className="logo">🚗 AUTOSALON</Link>
+          <Link to="/" className="logo"> SELLCAR</Link>
           <div className="nav-links">
             <span className="tech-badge">Backend: Django</span>
             <Link to="/">Каталог</Link>

@@ -3,8 +3,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
-from .models import Car, Order
-from .serializers import CarSerializer, OrderSerializer
+from .models import Car, Order, Seller, Review, TestDrive
+from .serializers import (
+    CarSerializer, 
+    OrderSerializer, 
+    SellerSerializer, 
+    ReviewSerializer, 
+    TestDriveSerializer
+)
 
 class IsAdminUser(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -28,9 +34,7 @@ class CarDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
     def get_permissions(self):
-        if self.request.method in ['PUT', 'PATCH', 'DELETE']:
-            return [IsAdminUser()]
-        return [permissions.AllowAny()]
+        return [IsAdminUser()] if self.request.method in ['PUT', 'PATCH', 'DELETE'] else [permissions.AllowAny()]
 
 class CarFiltersView(APIView):
     def get(self, request):
@@ -51,6 +55,26 @@ class OrderDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = OrderSerializer
     permission_classes = [IsAdminUser]
 
+class SellerListView(generics.ListAPIView):
+    queryset = Seller.objects.all()
+    serializer_class = SellerSerializer
+    permission_classes = [permissions.AllowAny]
+
+class ReviewListView(generics.ListAPIView):
+    serializer_class = ReviewSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        car_id = self.request.query_params.get('car')
+        if car_id:
+            return Review.objects.filter(car_id=car_id)
+        return Review.objects.all()
+
+class TestDriveCreateView(generics.CreateAPIView):
+    queryset = TestDrive.objects.all()
+    serializer_class = TestDriveSerializer
+    permission_classes = [permissions.AllowAny]
+
 class LoginView(APIView):
     def post(self, request):
         user = authenticate(username=request.data.get('username'), password=request.data.get('password'))
@@ -58,3 +82,8 @@ class LoginView(APIView):
             return Response({'error': 'Неверный логин или пароль'}, status=status.HTTP_401_UNAUTHORIZED)
         refresh = RefreshToken.for_user(user)
         return Response({'token': str(refresh.access_token), 'username': user.username})
+
+class TestDriveListView(generics.ListAPIView):
+    queryset = TestDrive.objects.all()
+    serializer_class = TestDriveSerializer
+    permission_classes = [IsAdminUser]

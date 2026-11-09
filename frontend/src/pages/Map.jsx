@@ -3,7 +3,7 @@ export default function Map() {
     <div style={{ background: '#161616', padding: '40px', borderRadius: '12px', border: '1px solid #2a2a2a' }}>
       <h1 style={{ fontSize: '32px', color: '#d4af37', marginBottom: '20px' }}>Мы на карте</h1>
       <p style={{ fontSize: '16px', color: '#aaa', marginBottom: '20px' }}>
-        Наш премиум-шоурум находится в центре Москвы. Приезжайте на тест-драйв!
+        Наш премиум-шоурум находится в Сургуте. Приезжайте на тест-драйв!
       </p>
       
       <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid #333', height: '500px' }}>

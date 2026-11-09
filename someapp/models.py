@@ -14,8 +14,10 @@ class Car(models.Model):
     description = models.TextField('Описание', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta: ordering = ['-id']
-    def __str__(self): return f'{self.brand} {self.model} ({self.year})'
+    class Meta: 
+        ordering = ['-id']
+    def __str__(self): 
+        return f'{self.brand} {self.model} ({self.year})'
 
 class Order(models.Model):
     STATUS_CHOICES = [('new', 'Новая'), ('done', 'Обработана'), ('cancel', 'Отменена')]
@@ -26,5 +28,42 @@ class Order(models.Model):
     status = models.CharField('Статус', max_length=20, choices=STATUS_CHOICES, default='new')
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta: ordering = ['-id']
-    def __str__(self): return f'Заявка #{self.id} - {self.name}'
+    class Meta: 
+        ordering = ['-id']
+    def __str__(self): 
+        return f'Заявка #{self.id} - {self.name}'
+
+class Seller(models.Model):
+    name = models.CharField('Имя', max_length=100)
+    role = models.CharField('Должность', max_length=100)
+    phone = models.CharField('Телефон', max_length=30)
+    image = models.CharField('URL фото', max_length=500, blank=True)
+
+    class Meta: 
+        ordering = ['id']
+    def __str__(self): 
+        return self.name
+
+class TestDrive(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='test_drives')
+    name = models.CharField('Имя клиента', max_length=100)
+    phone = models.CharField('Телефон', max_length=30)
+    date = models.DateField('Желаемая дата')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta: 
+        ordering = ['-created_at']
+    def __str__(self): 
+        return f'{self.name} - {self.car}'
+
+class Review(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='reviews', null=True, blank=True)
+    name = models.CharField('Имя', max_length=100)
+    text = models.TextField('Текст отзыва')
+    rating = models.IntegerField('Оценка (1-5)', default=5)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta: 
+        ordering = ['-created_at']
+    def __str__(self): 
+        return f'Отзыв от {self.name}'

@@ -5,7 +5,7 @@ export default function Contacts() {
       <div style={{ display: 'grid', gap: '20px', fontSize: '16px', color: '#e0e0e0' }}>
         <div>
           <strong style={{ color: '#888', display: 'block', marginBottom: '5px' }}>📍 Адрес шоу-рума:</strong>
-          г. Москва, Пресненская набережная, д. 12 (Башня Федерация)
+          г. Сургут, Ивана-Захарова д.11
         </div>
         <div>
           <strong style={{ color: '#888', display: 'block', marginBottom: '5px' }}>📞 Телефон:</strong>
