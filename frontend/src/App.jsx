@@ -25,7 +25,6 @@ export default function App() {
         <div className="container">
           <Link to="/" className="logo"> SELLCAR</Link>
           <div className="nav-links">
-            <span className="tech-badge">Backend: Django</span>
             <Link to="/">Каталог</Link>
             <Link to="/sellers">Продавцы</Link>
             <Link to="/about">О нас</Link>
