@@ -15,13 +15,13 @@ export default function Admin({ token }) {
     api.getCars().then(setCars);
     if (token) {
       api.getOrders(token).then(setOrders);
-      api.getTestDrives(token).then(setTestDrives); 
+      api.getTestDrives(token).then(setTestDrives);
     }
   };
 
   useEffect(() => { load(); }, [token]);
 
-  if (!token) return <p>Требуется <a href="/login">вход</a>.</p>;
+  if (!token) return <p>Требуется <a href="/login" style={{color: '#d4af37'}}>вход</a>.</p>;
 
   const submit = async (e) => {
     e.preventDefault();
@@ -29,13 +29,14 @@ export default function Admin({ token }) {
     else await api.createCar(form, token);
     setForm(emptyCar); setEditing(null); load();
   };
+  
   const remove = async (id) => { if (confirm('Удалить авто?')) { await api.deleteCar(id, token); load(); } };
   const setStatus = async (id, status) => { await api.updateOrder(id, status, token); load(); };
   const fmt = n => Number(n).toLocaleString('ru-RU') + ' ₽';
 
   return (
     <>
-      <h1 style={{ marginBottom: 20 }}>Админ-панель</h1>
+      <h1 style={{ marginBottom: 20, color: '#fff' }}>Админ-панель</h1>
       
       <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
         <button className={`btn ${tab === 'cars' ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setTab('cars')}>Автомобили</button>
@@ -45,18 +46,28 @@ export default function Admin({ token }) {
 
       {tab === 'cars' && (
         <>
-          <form onSubmit={submit} style={{ background: '#fff', padding: 20, borderRadius: 12, marginBottom: 24 }}>
-            <h3 style={{ marginBottom: 14 }}>{editing ? 'Редактировать' : 'Добавить авто'}</h3>
+          <form onSubmit={submit} style={{ background: '#161616', padding: 20, borderRadius: 12, marginBottom: 24, border: '1px solid #2a2a2a' }}>
+            <h3 style={{ marginBottom: 14, color: '#d4af37' }}>{editing ? 'Редактировать' : 'Добавить авто'}</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
               {[['brand','Марка'],['model','Модель'],['year','Год','number'],['price','Цена','number'],['mileage','Пробег','number'],['fuel','Топливо'],['transmission','КПП'],['body','Кузов'],['color','Цвет'],['image','URL изображения']].map(([key, label, type='text']) => (
                 <div className="form-group" key={key}>
-                  <label>{label}</label>
-                  <input type={type} value={form[key] ?? ''} onChange={e => setForm({ ...form, [key]: type === 'number' ? Number(e.target.value) : e.target.value })} />
+                  <label style={{ color: '#aaa' }}>{label}</label>
+                  <input 
+                    type={type} 
+                    value={form[key] ?? ''} 
+                    onChange={e => setForm({ ...form, [key]: type === 'number' ? Number(e.target.value) : e.target.value })} 
+                    style={{ background: '#121212', color: '#fff', border: '1px solid #333', borderRadius: '6px', padding: '10px', width: '100%', outline: 'none' }}
+                  />
                 </div>
               ))}
               <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-                <label>Описание</label>
-                <textarea rows="2" value={form.description ?? ''} onChange={e => setForm({ ...form, description: e.target.value })} />
+                <label style={{ color: '#aaa' }}>Описание</label>
+                <textarea 
+                  rows="2" 
+                  value={form.description ?? ''} 
+                  onChange={e => setForm({ ...form, description: e.target.value })} 
+                  style={{ background: '#121212', color: '#fff', border: '1px solid #333', borderRadius: '6px', padding: '10px', width: '100%', outline: 'none' }}
+                />
               </div>
             </div>
             <div style={{ display: 'flex', gap: 10, marginTop: 12 }}>
@@ -64,6 +75,7 @@ export default function Admin({ token }) {
               {editing && <button type="button" className="btn btn-ghost" onClick={() => { setEditing(null); setForm(emptyCar); }}>Отмена</button>}
             </div>
           </form>
+          
           <table className="table">
             <thead><tr><th>ID</th><th>Авто</th><th>Цена</th><th>Действия</th></tr></thead>
             <tbody>
@@ -89,7 +101,7 @@ export default function Admin({ token }) {
               <tr key={o.id}>
                 <td>{o.id}</td><td>{o.car_brand} {o.car_model}</td><td>{o.name}</td><td>{o.phone}</td>
                 <td>
-                  <select value={o.status} onChange={e => setStatus(o.id, e.target.value)} style={{ padding: 6, borderRadius: 6 }}>
+                  <select value={o.status} onChange={e => setStatus(o.id, e.target.value)} style={{ background: '#121212', color: '#fff', border: '1px solid #333', padding: 6, borderRadius: 6 }}>
                     <option value="new">Новая</option><option value="done">Обработана</option><option value="cancel">Отменена</option>
                   </select>
                 </td>
